@@ -15,19 +15,17 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 ---
 
 ## API Endpoints 📡
-
 | Endpoint                               | Method | Description                                      |
 |----------------------------------------|--------|--------------------------------------------------|
-| `/loans`                               | GET    | List all loans                                   |
 | `/loans`                               | POST   | Create a new loan                                |
 | `/loans/{id}/approve`                  | PUT    | Approve a loan                                   |
 | `/loans/{id}/reject`                   | PUT    | Reject a loan                                    |
 | `/loans/{id}/invest`                   | PUT    | Invest in a loan                                 |
 | `/loans/{id}/disburse`                 | PUT    | Disburse the loan                                |
+| `/loans`                               | GET    | List all loans                                   |
 | `/loans/{id}/outstanding?week={n}`     | GET    | Check outstanding amount for a specific week     |
 | `/loans/{id}/delinquent?week={n}`      | GET    | Check if a borrower is delinquent                |
 | `/loans/{id}/payment?week={n}`         | POST   | Make a payment for a specific week               |
-
 ---
 
 ## How to Run 🏃‍♂️
