@@ -31,6 +31,8 @@ func CreateLoan(c *fiber.Ctx) error {
 
 	json.Unmarshal(c.Body(), &body)
 
+	// resp := map
+
 	return c.JSON(body)
 }
 

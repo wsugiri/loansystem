@@ -49,12 +49,28 @@ This repository contains a **Loan Management API** built with **Go**, designed t
    go mod download
    ```
 
-3. **Run the server:**
+3. **Set Up the Database Schema:**
+   - Run the SQL script to create the necessary tables:
+   ```bash
+   mysql -u your_username -p your_database_name < 001_create_tables.sql
+   ```
+   - Run the SQL script to insert sample initial data:
+   ```bash
+   mysql -u your_username -p your_database_name < 002_insert_sample_users_data.sql
+   ```
+
+4. **Rename the Environment File:**
+   - Rename .env.example to .env
+
+5. **Update Environment Variables:**
+   - Open the .env file in your favorite text editor and change the values as needed for your configuration.
+
+6. **Run the server:**
    ```bash
    go run main.go
    ```
 
-4. **Test the endpoints using Postman or Curl:**
+7. **Test the endpoints using Postman or Curl:**
    Example:
    ```
    curl -X GET http://localhost:9001/api/loans
