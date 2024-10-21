@@ -36,3 +36,27 @@ This repository contains a **Loan Management API** built with **Go**, designed t
    ```bash
    git clone https://github.com/wsugiri/loansystem.git
    cd loan-management-api
+
+2. **Install dependencies:**
+   ```bash
+   go mod download
+   ```
+
+3. **Run the server:**
+   ```bash
+   go run main.go
+   ```
+
+4. **Test the endpoints using Postman or Curl:**
+   Example:
+   ```
+   curl -X GET http://localhost:9002/api/loans
+   ```
+
+## Tech Stack 🧑‍💻
+  - **Go**: Backend language
+  - **RESTful API**: For smooth client-server communication
+  - **Postman / Curl**: API testing tools   
+
+## Conclusion
+This API provides essential endpoints for managing loans, including state transitions, investments, payments, and delinquency checks. Follow the provided examples to interact with the API effectively.
