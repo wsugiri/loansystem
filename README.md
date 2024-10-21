@@ -4,13 +4,17 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 
 ---
 
-## Features 🛠️
+## Key Features 🛠️
 
-- **Loan Lifecycle Management**: Create, approve, reject, invest, and disburse loans.  
-- **Payment Handling**: Track outstanding amounts and process weekly repayments.  
-- **Delinquency Checks**: Identify delinquent borrowers based on missed payments.  
-- **RESTful Endpoints**: Simple and consistent API design for ease of integration.  
-- **Error Handling**: Meaningful HTTP status codes for easy troubleshooting.
+- **Create Loan**: Initiate new loan applications.  
+- **Approve Loan**: Approve loans after field validation.  
+- **Reject Loan**: Decline loans that don't meet requirements.  
+- **Invest in Loan**: Enable investors to fund loans.  
+- **Disburse Loan**: Transfer loan funds to borrowers.  
+- **Outstanding Loan**: Track remaining loan amounts to be repaid.  
+- **Check Delinquent Status**: Identify borrowers with missed payments.  
+- **Make Payment**: Process weekly repayments from borrowers.  
+- **Loan Lifecycle Management**: Oversee the complete lifecycle of loans.  
 
 ---
 
@@ -22,7 +26,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 | `/loans/{id}/reject`                   | PUT    | Reject a loan                                    |
 | `/loans/{id}/invest`                   | PUT    | Invest in a loan                                 |
 | `/loans/{id}/disburse`                 | PUT    | Disburse the loan                                |
-| `/loans`                               | GET    | List all loans                                   |
+| `/loans/{id}`                          | GET    | List transaction loans                           |
 | `/loans/{id}/outstanding?week={n}`     | GET    | Check outstanding amount for a specific week     |
 | `/loans/{id}/delinquent?week={n}`      | GET    | Check if a borrower is delinquent                |
 | `/loans/{id}/payment?week={n}`         | POST   | Make a payment for a specific week               |
@@ -48,7 +52,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 4. **Test the endpoints using Postman or Curl:**
    Example:
    ```
-   curl -X GET http://localhost:9002/api/loans
+   curl -X GET http://localhost:9001/api/loans
    ```
 
 ## Tech Stack 🧑‍💻
