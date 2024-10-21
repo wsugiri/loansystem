@@ -35,7 +35,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/wsugiri/loansystem.git
-   cd loan-management-api
+   cd loansystem
 
 2. **Install dependencies:**
    ```bash
