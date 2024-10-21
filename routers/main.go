@@ -12,7 +12,6 @@ func SetupRoutes(app *fiber.App) {
 	app.Put("/api/loans/:id/approve", loans.ApproveLoan)
 	app.Put("/api/loans/:id/reject", loans.RejectLoan)
 
-	app.Get("/api/master/db", master.GetDBConnection)
 	app.Get("/api/master/users", master.ListAllUser)
 	app.Get("/api/master/users/:role", master.ListAllUser)
 }

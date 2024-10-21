@@ -78,7 +78,9 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 
 ## Tech Stack 🧑‍💻
   - **Go**: Backend language
+  - **github.com/gofiber/fiber/v2**: Framework for creating RESTful APIs
   - **RESTful API**: For smooth client-server communication
+  - **MySQL**: Database for data storage
   - **Postman / Curl**: API testing tools   
 
 ## Conclusion
