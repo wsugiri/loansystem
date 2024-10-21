@@ -15,8 +15,12 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 - **Check Delinquent Status**: Identify borrowers with missed payments.  
 - **Make Payment**: Process weekly repayments from borrowers.  
 - **Loan Lifecycle Management**: Oversee the complete lifecycle of loans.  
-
 ---
+
+## Base URL
+```
+{base_url} = http://localhost:9001/api
+```
 
 ## API Endpoints 📡
 | Endpoint                               | Method | Description                                      |
@@ -26,7 +30,8 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 | `/loans/{id}/reject`                   | PUT    | Reject a loan                                    |
 | `/loans/{id}/invest`                   | PUT    | Invest in a loan                                 |
 | `/loans/{id}/disburse`                 | PUT    | Disburse the loan                                |
-| `/loans/{id}`                          | GET    | List transaction loans                           |
+| `/loans`                               | GET    | List loans                                       |
+| `/loans/{id}`                          | GET    | Detail transaction loans                         |
 | `/loans/{id}/outstanding?week={n}`     | GET    | Check outstanding amount for a specific week     |
 | `/loans/{id}/delinquent?week={n}`      | GET    | Check if a borrower is delinquent                |
 | `/loans/{id}/payment?week={n}`         | POST   | Make a payment for a specific week               |
