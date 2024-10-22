@@ -271,12 +271,6 @@ Content-Type: application/json
   "message": "already disburse",
 }
 ```
-```json5
-{
-  "status": "error",
-  "message": "Loan is not in an approved state",
-}
-```
 
 ## How to Run 🏃‍♂️
 
