@@ -44,8 +44,7 @@ func CreateLoan(c *fiber.Ctx) error {
 	instalment := totalLoan / payload.LoanDurationWeeks
 	status := "proposed"
 
-	query = `insert into loans 
-	(borrower_id, principal_amount, rate, total_loan, instalment, duration_weeks, status, agreement_url) values (?, ?, ?, ?, ?, ?, ?, ?)`
+	query = `insert into loans (borrower_id, principal_amount, rate, total_loan, instalment, duration_weeks, status, agreement_url) values (?, ?, ?, ?, ?, ?, ?, ?)`
 
 	insertResult, err := utils.DB.Exec(query,
 		payload.BorrowerID, payload.PrincipalAmount, payload.InterestRate,
@@ -147,7 +146,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 		})
 	}
 
-	// Inser installments
+	// Insert installments
 	query = "insert into payments (loan_id, week, amount, due_date) values "
 
 	// Create placeholders for each row.
@@ -241,47 +240,20 @@ func RejectLoan(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid approval date"})
 	}
 
-	fmt.Println(rejectionDate)
+	// Insert Rejection
+	query = "insert into rejections (loan_id, rejection_reason, rejection_date, rejected_by) values (?, ?, ?, ?)"
+	_, err = utils.DB.Exec(query, loanId, payload.RejectionMessage, rejectionDate, payload.EmployeeID)
 
-	// // Generate the instalments
-	// instalments := make([]models.Instalment, 0, loan.DurationWeek)
-	// for idx := 0; idx < loan.DurationWeek; idx++ {
-	// 	// Calculate the due date by adding (idx * 7) days.
-	// 	dueDate := approveDate.AddDate(0, 0, (idx+1)*7).Format("2006-01-02")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
 
-	// 	instalments = append(instalments, models.Instalment{
-	// 		Week:    idx + 1,
-	// 		Amount:  loan.Instalment,
-	// 		DueDate: dueDate,
-	// 	})
-	// }
-
-	// // Inser installments
-	// query = "insert into payments (loan_id, week, amount, due_date) values "
-
-	// // Create placeholders for each row.
-	// values := []string{}
-	// args := []interface{}{}
-
-	// for _, instalment := range instalments {
-	// 	values = append(values, "(?, ?, ?, ?)")
-	// 	args = append(args, loanId, instalment.Week, instalment.Amount, instalment.DueDate)
-	// }
-
-	// // Join all value placeholders into the query.
-	// query += strings.Join(values, ", ")
-
-	// // Execute the query.
-	// _, err = utils.DB.Exec(query, args...)
-	// if err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	// }
-
-	// query = "update loans set status = ? where id = ?"
-	// _, err = utils.DB.Exec(query, status, loanId)
-	// if err != nil {
-	// 	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	// }
+	// Update Status
+	query = "update loans set status = ? where id = ?"
+	_, err = utils.DB.Exec(query, status, loanId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
 
 	resp := fiber.Map{
 		"id":             loanId,
