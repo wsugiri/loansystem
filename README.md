@@ -38,7 +38,15 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 ---
 
 ### 1. Create a new loan
-Create a new loan.
+The create new loan feature allows authorized staff to initiate and set up a loan application within the system. This process captures essential details about the loan and the borrower, facilitating the lending workflow.
+
+   When creating a new loan, the following information must be provided:
+   - **Borower Id**: A unique identifier for the borrower in the system.
+   - **Principal Amount**: The total amount of money being borrowed.
+   - **Interest Rate**: The percentage of interest that will be charged on the principal amount.
+   - **Loan Duration**: The number of weeks over which the loan will be repaid.
+   - **Agreement URL**: A link to the loan agreement that outlines the terms and conditions.
+
 #### Request
 ```
 POST {base_url}/loans
@@ -78,6 +86,20 @@ Content-Type: application/json
 
 
 ### 2. Approve a loan
+The loan approval process is a crucial step in the lending workflow, ensuring that loans are thoroughly vetted before being offered to investors or lenders.
+1. **Approval Requirements**: 
+   Each loan approval must include the following information:
+   - **Proof of Visit**: A picture confirming that a field validator has visited the borrower.
+   - **Employee ID**: The identification number of the field validator who conducted the visit.
+   - **Date of Approval**: The date when the loan was approved.
+
+2. **Irreversible Approval**: 
+   Once a loan is approved, it cannot revert back to the "proposed" state. This ensures the integrity of the approval process and maintains a clear workflow.
+
+3. **Investor Readiness**: 
+   After approval, the loan is ready to be offered to investors or lenders, enabling the funding process to begin.
+
+
 #### Request
 ```
 PUT {base_url}/loans/9/approve
@@ -132,6 +154,9 @@ Content-Type: application/json
 
 
 ### 3. Reject a loan
+The loan rejection process allows staff to deny loan applications that do not meet the necessary criteria or pose potential risks. This step is crucial for maintaining the integrity of the lending system.
+
+For instance, if a loan application is rejected due to insufficient income verification, the staff member will document the reason and notify the borrower. The rejected loan will remain in the system for record-keeping but will not proceed to the approval phase.
 #### Request
 ```
 PUT {base_url}/loans/7/reject
@@ -160,6 +185,50 @@ Content-Type: application/json
 ```json5
 {
    "error": "unregistered_rejector",
+}
+```
+
+### 4. Invest in a loan
+This feature allows multiple investors to contribute to a single loan. Each investor can invest a unique amount towards the loan, enabling flexible funding options.
+
+**Key Points**
+- **Multiple Investors**: A loan can have multiple investors, with each investor contributing their own amount. This allows for diverse participation in the funding process.
+  
+- **Investment Limit**: The total amount invested by all investors combined cannot exceed the loan's principal amount. This ensures that the funding is balanced and aligns with the loan's initial value.
+
+#### Request
+```
+PUT {base_url}/loans/2/invest
+Content-Type: application/json
+```
+
+#### Request Body
+```json5
+{
+  "investor_id": 6,
+  "amount": 500000
+}
+```
+
+#### Response
+```json5
+{
+    "data": {
+        "available_amount": 0,
+        "invested_amount": 5000000,
+        "prncipal_amount": 5000000
+    },
+    "investor": {
+        "email": "fani.mardiana@example.com",
+        "name": "Fani Mardiana"
+    }
+}
+```
+
+#### Sample Response Error
+```json5
+{
+    "error": "cannot invest more than 450000"
 }
 ```
 

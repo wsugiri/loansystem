@@ -68,10 +68,21 @@ func InvestLoan(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": fmt.Sprintf("cannot invest more than %d", int(availableAmount))})
 	}
 
-	queries := c.Queries()
+	// Insert Investment
+	query = "insert into investments (loan_id, investor_id, amount) values (?, ?, ?)"
+	_, err = utils.DB.Exec(query, loanId, payload.InvestorID, payload.Amount)
 
-	fmt.Println(queries)
-	fmt.Println(queries["brand"])
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Update Status
+	status := "invested"
+	query = "update loans set status = ? where id = ?"
+	_, err = utils.DB.Exec(query, status, loanId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
 
 	return c.JSON(fiber.Map{
 		"data": fiber.Map{
@@ -80,7 +91,6 @@ func InvestLoan(c *fiber.Ctx) error {
 			"available_amount": loan.PrincipalAmount - (loan.InvestedAmount + payload.Amount),
 		},
 		"investor": fiber.Map{
-			"id":    investor.ID,
 			"name":  investor.Name,
 			"email": investor.Email,
 		},
