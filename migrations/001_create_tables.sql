@@ -12,7 +12,9 @@ CREATE TABLE loans (
     id INT AUTO_INCREMENT PRIMARY KEY,
     borrower_id INT NOT NULL,
     principal_amount DECIMAL(15, 2) NOT NULL,
-    rate FLOAT NOT NULL, -- Interest rate
+    rate DECIMAL(5, 2) NOT NULL, -- Interest rate
+    total_loan DECIMAL(15, 2) NOT NULL,
+    instalment DECIMAL(15, 2) NOT NULL,
     status ENUM('proposed', 'approved', 'rejected', 'invested', 'disbursed') DEFAULT 'proposed',
     agreement_url VARCHAR(500), -- Link to agreement letter (PDF)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

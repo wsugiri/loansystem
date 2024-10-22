@@ -23,19 +23,52 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 ```
 
 ## API Endpoints 📡
-| Endpoint                               | Method | Description                                      |
-|----------------------------------------|--------|--------------------------------------------------|
-| `/loans`                               | POST   | Create a new loan                                |
-| `/loans/{id}/approve`                  | PUT    | Approve a loan                                   |
-| `/loans/{id}/reject`                   | PUT    | Reject a loan                                    |
-| `/loans/{id}/invest`                   | PUT    | Invest in a loan                                 |
-| `/loans/{id}/disburse`                 | PUT    | Disburse the loan                                |
-| `/loans`                               | GET    | List loans                                       |
-| `/loans/{id}`                          | GET    | Detail transaction loans                         |
-| `/loans/{id}/outstanding?week={n}`     | GET    | Check outstanding amount for a specific week     |
-| `/loans/{id}/delinquent?week={n}`      | GET    | Check if a borrower is delinquent                |
-| `/loans/{id}/payment?week={n}`         | POST   | Make a payment for a specific week               |
+| No | Endpoint                         | Method | Description                                  |
+|----|----------------------------------|--------|----------------------------------------------|
+|  1 | `/loans`                         | POST   | Create a new loan                            |
+|  2 | `/loans/{id}/approve`            | PUT    | Approve a loan                               |
+|  3 | `/loans/{id}/reject`             | PUT    | Reject a loan                                |
+|  4 | `/loans/{id}/invest`             | PUT    | Invest in a loan                             |
+|  5 | `/loans/{id}/disburse`           | PUT    | Disburse the loan                            |
+|  6 | `/loans`                         | GET    | List loans                                   |
+|  7 | `/loans/{id}`                    | GET    | Detail transaction loans                     |
+|  8 | `/loans/{id}/{week}/outstanding` | GET    | Check outstanding amount for a specific week |
+|  9 | `/loans/{id}/{week}/delinquent`  | GET    | Check if a borrower is delinquent            |
+| 10 | `/loans/{id}/{week}/payment`     | POST   | Make a payment for a specific week           |
 ---
+
+### 1. Create a new loan
+Create a new loan.
+#### Request
+```
+POST {base_url}/loans
+Content-Type: application/json
+```
+
+#### Request Body
+```json
+{
+  {
+  "borrower_id": 1,
+  "principal_amount": 5000000,
+  "interest_rate": 10,
+  "loan_duration_weeks": 50,
+  "agreement_url": "https://image-upload.io/loans/borrower_1.jpg"
+}
+```
+
+#### Response
+```json
+{
+   "id": 9,
+   "status": "proposed",
+   "data": {
+      "duration_weeks": 50,
+      "instalment": 110000,
+      "total_loan": 5500000
+   }
+}
+```
 
 ## How to Run 🏃‍♂️
 
