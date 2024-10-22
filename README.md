@@ -46,7 +46,7 @@ Content-Type: application/json
 ```
 
 #### Request Body
-```json
+```json5
 {
   "borrower_id": 1,
   "principal_amount": 5000000,
@@ -57,7 +57,7 @@ Content-Type: application/json
 ```
 
 #### Response
-```json
+```json5
 {
    "id": 9,
    "status": "proposed",
@@ -70,7 +70,7 @@ Content-Type: application/json
 ```
 
 #### Sample Response Error
-```json
+```json5
 {
    "error": "unregistered_borrower"
 }
@@ -85,7 +85,7 @@ Content-Type: application/json
 ```
 
 #### Request Body
-```json
+```json5
 {
   "employee_id": 4,
   "approval_date": "2024-12-01 14:20",
@@ -94,7 +94,7 @@ Content-Type: application/json
 ```
 
 #### Response
-```json
+```json5
 {
    "id": 1,
    "status": "approved",
@@ -124,7 +124,7 @@ Content-Type: application/json
 ```
 
 #### Sample Response Error
-```json
+```json5
 {
    "error": "unregistered_approver",
 }
@@ -139,7 +139,7 @@ Content-Type: application/json
 ```
 
 #### Request Body
-```json
+```json5
 {
   "employee_id": 5,
   "rejection_date": "2024-02-01",
@@ -148,7 +148,7 @@ Content-Type: application/json
 ```
 
 #### Response
-```json
+```json5
 {
    "id": 7,
    "status": "rejected",
@@ -157,7 +157,7 @@ Content-Type: application/json
 ```
 
 #### Sample Response Error
-```json
+```json5
 {
    "error": "unregistered_rejector",
 }
