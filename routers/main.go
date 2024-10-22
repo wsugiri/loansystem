@@ -7,10 +7,10 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
-	app.Get("/api/loans", loans.ListLoan)
-	app.Post("/api/loans", loans.CreateLoan)
+	app.Post("/api/loans", loans.ProposeLoan)
 	app.Put("/api/loans/:id/approve", loans.ApproveLoan)
 	app.Put("/api/loans/:id/reject", loans.RejectLoan)
+	app.Put("/api/loans/:id/invest", loans.InvestLoan)
 
 	app.Get("/api/master/users", master.ListAllUser)
 	app.Get("/api/master/users/:role", master.ListAllUser)

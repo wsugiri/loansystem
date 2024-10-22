@@ -76,6 +76,7 @@ CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     loan_id INT NOT NULL,
     amount DECIMAL(15, 2) NOT NULL,
+    is_paid INT NOT NULL DEFAULT 0,
     payment_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (loan_id) REFERENCES loans(id)
@@ -85,7 +86,7 @@ CREATE TABLE payments (
 CREATE OR REPLACE VIEW loan_outstanding AS
 SELECT 
     l.id AS loan_id,
-    l.principal_amount - IFNULL(SUM(p.amount), 0) AS outstanding_amount
+    l.total_loan - IFNULL(SUM(p.amount), 0) AS outstanding_amount
 FROM loans l
-LEFT JOIN payments p ON l.id = p.loan_id
+LEFT JOIN payments p ON l.id = p.loan_id and is_paid = 1
 GROUP BY l.id;
