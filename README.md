@@ -48,7 +48,6 @@ Content-Type: application/json
 #### Request Body
 ```json
 {
-  {
   "borrower_id": 1,
   "principal_amount": 5000000,
   "interest_rate": 10,
