@@ -11,10 +11,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 - **Reject Loan**: Decline loans that don't meet requirements.  
 - **Invest in Loan**: Enable investors to fund loans.  
 - **Disburse Loan**: Transfer loan funds to borrowers.  
-- **Outstanding Loan**: Track remaining loan amounts to be repaid.  
-- **Check Delinquent Status**: Identify borrowers with missed payments.  
-- **Make Payment**: Process weekly repayments from borrowers.  
-- **Loan Lifecycle Management**: Oversee the complete lifecycle of loans.  
+- **List Loan**: List available loans with status.  
 ---
 
 ## Base URL
@@ -31,10 +28,6 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 |  4 | `/loans/{id}/invest`             | PUT    | Invest in a loan                             |
 |  5 | `/loans/{id}/disburse`           | PUT    | Disburse the loan                            |
 |  6 | `/loans`                         | GET    | List loans                                   |
-|  7 | `/loans/{id}`                    | GET    | Detail transaction loans                     |
-|  8 | `/loans/{id}/{week}/outstanding` | GET    | Check outstanding amount for a specific week |
-|  9 | `/loans/{id}/{week}/delinquent`  | GET    | Check if a borrower is delinquent            |
-| 10 | `/loans/{id}/{week}/payment`     | POST   | Make a payment for a specific week           |
 ---
 
 ### 1. Create a new loan

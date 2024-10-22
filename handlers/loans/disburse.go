@@ -20,12 +20,18 @@ func DisburseLoan(c *fiber.Ctx) error {
 
 	loanId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error",
+			"error":  err.Error(),
+		})
 	}
 
 	// Parse the request body
 	if err := c.BodyParser(&payload); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error",
+			"error":  err.Error(),
+		})
 	}
 
 	// Check Employee
@@ -43,13 +49,16 @@ func DisburseLoan(c *fiber.Ctx) error {
 			})
 		}
 
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error",
+			"error":  err.Error(),
+		})
 	}
 
 	// Check Loan
 	var loan models.Loan
 	query = `
-	select a.id, a.borrower_id, a.principal_amount, a.status, a.rate
+	select a.id, a.borrower_id, a.principal_amount, a.status, a.rate, a.duration_weeks, instalment
 	     , sum(ifnull(b.amount, 0)) as invested_amount
 	  from loans a
 	  left join investments b on b.loan_id = a.id 
@@ -57,7 +66,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 	   and a.status in ('approved', 'invested')
 	 group by a.id`
 
-	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.PrincipalAmount, &loan.Status, &loan.Rate, &loan.InvestedAmount); err != nil {
+	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.PrincipalAmount, &loan.Status, &loan.Rate, &loan.DurationWeek, &loan.Instalment, &loan.InvestedAmount); err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
@@ -74,9 +83,11 @@ func DisburseLoan(c *fiber.Ctx) error {
 	// Insert Disbursement
 	query = "insert into disbursements (loan_id, field_officer_id, disbursement_date, agreement_signed_url) values (?, ?, ?, ?)"
 	_, err = utils.DB.Exec(query, loanId, payload.EmployeeID, payload.DisbursementDate, payload.AgreementLetter)
-
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": err.Error(),
+		})
 	}
 
 	// Update Status
@@ -93,6 +104,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 		fmt.Println("Error parsing date:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid approval date"})
 	}
+
 	instalments := make([]models.Instalment, 0, loan.DurationWeek)
 	for idx := 0; idx < loan.DurationWeek; idx++ {
 		// Calculate the due date by adding (idx * 7) days.
