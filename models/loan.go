@@ -7,5 +7,6 @@ type Loan struct {
 	Rate            float32
 	TotalLoan       float32
 	Instalment      float32
+	DurationWeek    int
 	Status          string
 }

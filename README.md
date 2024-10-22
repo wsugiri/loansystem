@@ -69,6 +69,101 @@ Content-Type: application/json
 }
 ```
 
+#### Sample Response Error
+```json
+{
+   "error": "unregistered_borrower"
+}
+```
+
+
+### 2. Approve a loan
+#### Request
+```
+PUT {base_url}/loans/9/approve
+Content-Type: application/json
+```
+
+#### Request Body
+```json
+{
+  "employee_id": 4,
+  "approval_date": "2024-12-01 14:20",
+  "validator_photo": "string"  // URL or base64 image
+}
+```
+
+#### Response
+```json
+{
+   "id": 1,
+   "status": "approved",
+   "data": {
+      "duration_weeks": 50,
+      "total_loan": 5500000,
+      "instalments": [
+         {
+            "Week": 1,
+            "Amount": 110000,
+            "DueDate": "2024-12-08"
+         },
+         {
+            "Week": 2,
+            "Amount": 110000,
+            "DueDate": "2024-12-15"
+         },
+         {
+            "Week": 3,
+            "Amount": 110000,
+            "DueDate": "2024-12-22"
+         },
+         ...
+      ]
+   }
+}
+```
+
+#### Sample Response Error
+```json
+{
+   "error": "unregistered_approver",
+}
+```
+
+
+### 3. Reject a loan
+#### Request
+```
+PUT {base_url}/loans/7/reject
+Content-Type: application/json
+```
+
+#### Request Body
+```json
+{
+  "employee_id": 5,
+  "rejection_date": "2024-02-01",
+  "rejection_message": "string"  // reason message 
+}
+```
+
+#### Response
+```json
+{
+   "id": 7,
+   "status": "rejected",
+   "rejection_date": "2024-02-01"
+}
+```
+
+#### Sample Response Error
+```json
+{
+   "error": "unregistered_rejector",
+}
+```
+
+
 ## How to Run 🏃‍♂️
 
 1. **Clone the Repository:**

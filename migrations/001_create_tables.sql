@@ -15,6 +15,7 @@ CREATE TABLE loans (
     rate DECIMAL(5, 2) NOT NULL, -- Interest rate
     total_loan DECIMAL(15, 2) NOT NULL,
     instalment DECIMAL(15, 2) NOT NULL,
+    duration_weeks INT NOT NULL,
     status ENUM('proposed', 'approved', 'rejected', 'invested', 'disbursed') DEFAULT 'proposed',
     agreement_url VARCHAR(500), -- Link to agreement letter (PDF)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -26,7 +27,7 @@ CREATE TABLE loans (
 CREATE TABLE approvals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     loan_id INT NOT NULL,
-    picture_proof_url VARCHAR(500),
+    picture_proof_url TEXT,
     approval_date DATE NOT NULL,
     approval_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -75,7 +76,7 @@ CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     loan_id INT NOT NULL,
     amount DECIMAL(15, 2) NOT NULL,
-    payment_date DATE NOT NULL,
+    payment_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (loan_id) REFERENCES loans(id)
 );
