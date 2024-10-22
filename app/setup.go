@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/joho/godotenv"
 	"github.com/wsugiri/loansystem/routers"
 	"github.com/wsugiri/loansystem/utils"
@@ -23,9 +25,12 @@ func SetupAndRunApp() error {
 
 	// Initialize Fiber app
 	app := fiber.New()
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello Sample 001")
-	})
+
+	// attach middleware
+	app.Use(recover.New())
+	app.Use(logger.New(logger.Config{
+		Format: "[${ip}]:${port} ${status} - ${method} ${path} ${latency}\n",
+	}))
 
 	// Initialize Routings
 	routers.SetupRoutes(app)
