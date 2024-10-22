@@ -16,37 +16,43 @@ func InvestLoan(c *fiber.Ctx) error {
 	}
 	loanId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error",
+			"error":  err.Error(),
+		})
 	}
 
 	// Parse the request body
 	if err := c.BodyParser(&payload); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error",
+			"error":  err.Error(),
+		})
 	}
 
 	// Check Investor
 	var query string
 	var investor models.User
 
-	query = `select id, name, email, role from users where id = ?`
+	query = `select id, name, email, role from users where id = ? and role = 'investor'`
 	if err := utils.DB.QueryRow(query, payload.InvestorID).Scan(&investor.ID, &investor.Name, &investor.Email, &investor.Role); err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "invalid investor id"})
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"status":  "error",
+				"message": "invalid investor id",
+			})
 		}
 
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	if investor.Role != "investor" {
-		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"error": "invalid investor id",
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": err.Error(),
 		})
 	}
 
 	// Check Loan
 	var loan models.Loan
 	query = `
-	select a.id, a.borrower_id, a.principal_amount, a.status
+	select a.id, a.borrower_id, a.principal_amount, a.status, a.rate
 	     , sum(ifnull(b.amount, 0)) as invested_amount
 	  from loans a
 	  left join investments b on b.loan_id = a.id 
@@ -54,18 +60,29 @@ func InvestLoan(c *fiber.Ctx) error {
 	   and a.status in ('approved', 'invested')
 	 group by a.id`
 
-	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.PrincipalAmount, &loan.Status, &loan.InvestedAmount); err != nil {
+	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.PrincipalAmount, &loan.Status, &loan.Rate, &loan.InvestedAmount); err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "invalid loan id"})
+			if err.Error() == "sql: no rows in result set" {
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+					"status":  "error",
+					"message": "invalid loan id",
+				})
+			}
 		}
 
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": err.Error(),
+		})
 	}
 
 	availableAmount := loan.PrincipalAmount - loan.InvestedAmount
 
 	if availableAmount < payload.Amount {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": fmt.Sprintf("cannot invest more than %d", int(availableAmount))})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"statue":  "error",
+			"message": fmt.Sprintf("cannot invest more than %d", int(availableAmount)),
+		})
 	}
 
 	// Insert Investment
@@ -73,7 +90,10 @@ func InvestLoan(c *fiber.Ctx) error {
 	_, err = utils.DB.Exec(query, loanId, payload.InvestorID, payload.Amount)
 
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": err.Error(),
+		})
 	}
 
 	// Update Status
@@ -81,18 +101,23 @@ func InvestLoan(c *fiber.Ctx) error {
 	query = "update loans set status = ? where id = ?"
 	_, err = utils.DB.Exec(query, status, loanId)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": err.Error(),
+		})
 	}
 
 	return c.JSON(fiber.Map{
+		"status":  "success",
+		"message": "Investment successfully made",
 		"data": fiber.Map{
-			"prncipal_amount":  loan.PrincipalAmount,
-			"invested_amount":  loan.InvestedAmount + payload.Amount,
-			"available_amount": loan.PrincipalAmount - (loan.InvestedAmount + payload.Amount),
-		},
-		"investor": fiber.Map{
-			"name":  investor.Name,
-			"email": investor.Email,
+			"loan_id":               loanId,
+			"borrower_id":           loan.BorrowerID,
+			"investor_id":           payload.InvestorID,
+			"investment_amount":     payload.Amount,
+			"total_invested":        loan.InvestedAmount + payload.Amount, // Total amount invested after this investment
+			"loan_principal_amount": loan.PrincipalAmount,
+			"remaining_amount":      loan.PrincipalAmount - (loan.InvestedAmount + payload.Amount), // Amount still needed to fully fund the loan
 		},
 	})
 }

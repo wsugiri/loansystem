@@ -46,7 +46,7 @@ func ListAllUser(c *fiber.Ctx) error {
 	}
 
 	resp := fiber.Map{
-		"status": "OK",
+		"status": "success",
 		"total":  len(users),
 		"items":  users,
 	}

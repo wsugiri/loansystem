@@ -20,17 +20,24 @@ func ProposeLoan(c *fiber.Ctx) error {
 
 	// Parse the request body
 	if err := c.BodyParser(&payload); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error",
+			"error":  err.Error(),
+		})
 	}
 
-	query = `select id, name, role from users where id = ?`
+	query = `select id, name, role from users where id = ? and role = 'borrower'`
 	if err := utils.DB.QueryRow(query, payload.BorrowerID).Scan(&user.ID, &user.Name, &user.Role); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
+		if err.Error() == "sql: no rows in result set" {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"status":  "error",
+				"message": "invalid borrower_id",
+			})
+		}
 
-	if user.Role != "borrower" {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "unregistered_borrower",
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": err.Error(),
 		})
 	}
 
@@ -56,12 +63,16 @@ func ProposeLoan(c *fiber.Ctx) error {
 	}
 
 	response = fiber.Map{
-		"id":     id,
-		"status": status,
+		"status":  "success",
+		"message": "Loan successfully created",
 		"data": fiber.Map{
-			"total_loan":     totalLoan,
-			"instalment":     instalment,
-			"duration_weeks": payload.LoanDurationWeeks,
+			"loan_id":             id,
+			"borrower_id":         payload.BorrowerID,
+			"principal_amount":    payload.PrincipalAmount,
+			"interest_rate":       payload.InterestRate,
+			"loan_duration_weeks": payload.LoanDurationWeeks,
+			"total_loan":          totalLoan,
+			"agreement_url":       payload.AgreementUrl,
 		},
 	}
 

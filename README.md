@@ -67,20 +67,25 @@ Content-Type: application/json
 #### Response
 ```json5
 {
-   "id": 9,
-   "status": "proposed",
-   "data": {
-      "duration_weeks": 50,
-      "instalment": 110000,
-      "total_loan": 5500000
-   }
+  "status": "success",
+  "message": "Loan successfully created",
+  "data": {
+    "loan_id": 1001,
+    "borrower_id": 1,
+    "principal_amount": 5000000,
+    "interest_rate": 10,
+    "loan_duration_weeks": 50,
+    "total_loan": 5500000,  // Principal + interest (principal * interest_rate * 0.01)
+    "agreement_url": "https://image-upload.io/loans/borrower_1.jpg"
+  }
 }
 ```
 
 #### Sample Response Error
 ```json5
 {
-   "error": "unregistered_borrower"
+   "status": "error",
+   "message": "invalid borrower_id"
 }
 ```
 
@@ -118,29 +123,15 @@ Content-Type: application/json
 #### Response
 ```json5
 {
-   "id": 1,
-   "status": "approved",
+   "status": "success",
+   "message": "Loan successfully approved",
    "data": {
-      "duration_weeks": 50,
-      "total_loan": 5500000,
-      "instalments": [
-         {
-            "Week": 1,
-            "Amount": 110000,
-            "DueDate": "2024-12-08"
-         },
-         {
-            "Week": 2,
-            "Amount": 110000,
-            "DueDate": "2024-12-15"
-         },
-         {
-            "Week": 3,
-            "Amount": 110000,
-            "DueDate": "2024-12-22"
-         },
-         ...
-      ]
+      "loan_id": 1001,
+      "borrower_id": 1,
+      "approval_date": "2024-12-01",
+      "employee_id": 5,
+      "validator_photo": "https://example.com/validator_photo.jpg",
+      "loan_status": "approved"
    }
 }
 ```
@@ -148,7 +139,8 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "error": "unregistered_approver",
+   "status": "error",
+   "message": "invalid employee_id"
 }
 ```
 
@@ -157,6 +149,7 @@ Content-Type: application/json
 The loan rejection process allows staff to deny loan applications that do not meet the necessary criteria or pose potential risks. This step is crucial for maintaining the integrity of the lending system.
 
 For instance, if a loan application is rejected due to insufficient income verification, the staff member will document the reason and notify the borrower. The rejected loan will remain in the system for record-keeping but will not proceed to the approval phase.
+
 #### Request
 ```
 PUT {base_url}/loans/7/reject
@@ -175,16 +168,24 @@ Content-Type: application/json
 #### Response
 ```json5
 {
-   "id": 7,
-   "status": "rejected",
-   "rejection_date": "2024-02-01"
+   "status": "success",
+   "message": "Loan successfully rejected",
+   "data": {
+      "loan_id": 9,
+      "borrower_id": 3,
+      "employee_id": 4,
+      "loan_status": "rejected",
+      "rejection_date": "2024-02-01",
+      "rejection_message": "tidak memenuhi syarat"
+   }
 }
 ```
 
 #### Sample Response Error
 ```json5
 {
-   "error": "unregistered_rejector",
+   "status": "error",
+   "message": "invalid employee_id"
 }
 ```
 
@@ -210,28 +211,79 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
-    "data": {
-        "available_amount": 0,
-        "invested_amount": 5000000,
-        "prncipal_amount": 5000000
-    },
-    "investor": {
-        "email": "fani.mardiana@example.com",
-        "name": "Fani Mardiana"
-    }
+   "status": "success",
+   "message": "Investment successfully made",
+   "data": {
+      "loan_id": 4,
+      "borrower_id": 3,
+      "investor_id": 7,
+      "investment_amount": 150000,
+      "loan_principal_amount": 5000000,
+      "remaining_amount": 4600000,
+      "total_invested": 400000
+   }
 }
 ```
 
 #### Sample Response Error
 ```json5
 {
-    "error": "cannot invest more than 450000"
+   "status": "error",
+   "message": "cannot invest more than 450000"
 }
 ```
 
+
+### 5. Disburse the loan
+The disbursement of a loan marks the final step in the loan process, where the approved loan amount is transferred to the borrower. This step ensures that the loan is officially activated and funds are made available to the borrower.
+
+#### Request
+```
+PUT {base_url}/loans/2/disburse
+Content-Type: application/json
+```
+
+#### Request Body
+```json5
+{
+  "employee_id": "string",
+  "disbursement_date": "YYYY-MM-DD",
+  "agreement_letter": "string"               // URL or base64 image
+}
+```
+
+#### Sample Response
+```json5
+{
+  "status": "success",
+  "message": "Loan successfully disbursed",
+  "data": {
+    "loan_id": 1001,
+    "borrower_id": 12345,
+    "disbursement_date": "2024-11-01",
+    "disbursed_amount": 500000,
+    "employee_id": 128,
+    "agreement_letter": "https://example.com/agreement/1001"
+  }
+}
+```
+
+#### Sample Response Error
+```json5
+{
+  "status": "error",
+  "message": "already disburse",
+}
+```
+```json5
+{
+  "status": "error",
+  "message": "Loan is not in an approved state",
+}
+```
 
 ## How to Run 🏃‍♂️
 
