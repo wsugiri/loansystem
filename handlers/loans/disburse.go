@@ -45,7 +45,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid employee id",
+				"message": "The provided employee_id is invalid or does not exist. Please check and try again",
 			})
 		}
 
@@ -70,7 +70,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid loan id",
+				"message": "The provided loan_id is invalid or does not exist. Please check and try again",
 			})
 		}
 

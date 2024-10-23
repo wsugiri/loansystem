@@ -132,7 +132,7 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "message": "The provided employee ID is not authorized to approve this loan",
+   "message": "The provided employee_id is not authorized to approve this loan",
    "status": "error"
 }
 ```
@@ -189,7 +189,7 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "The provided employee ID is not authorized to approve this loan"
+   "message": "The provided employee_id is not authorized to approve this loan"
 }
 ```
 ```json5
