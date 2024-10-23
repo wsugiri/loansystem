@@ -132,20 +132,20 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "message": "The provided employee_id is not authorized to approve this loan",
-   "status": "error"
+   "status": "error",
+   "message": "The provided employee_id is not authorized to approve this loan"
 }
 ```
 ```json5
 {
-   "message": "The provided employee_id is invalid or does not exist. Please check and try again",
-   "status": "error"
+   "status": "error",
+   "message": "The provided employee_id is invalid or does not exist. Please check and try again"
 }
 ```
 ```json5
 {
-   "message": "Loan is not in an proposed state",
-   "status": "error"
+   "status": "error",
+   "message": "Loan is not in an proposed state"
 }
 ```
 
