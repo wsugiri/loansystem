@@ -219,7 +219,7 @@ PUT {base_url}/loans/2/invest
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "investor_id": 6,
@@ -273,7 +273,7 @@ PUT {base_url}/loans/2/disburse
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "employee_id": "string",
