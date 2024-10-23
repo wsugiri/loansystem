@@ -45,7 +45,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid employee id",
+				"message": "The provided employee_id is invalid or does not exist. Please check and try again",
 			})
 		}
 
@@ -63,20 +63,27 @@ func DisburseLoan(c *fiber.Ctx) error {
 	  from loans a
 	  left join investments b on b.loan_id = a.id 
 	 where a.id = ?
-	   and a.status in ('approved', 'invested')
+	   and a.status in ('approved', 'invested','disbursed')
 	 group by a.id`
 
 	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.PrincipalAmount, &loan.Status, &loan.Rate, &loan.DurationWeek, &loan.Instalment, &loan.InvestedAmount); err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid loan id",
+				"message": "The provided loan_id is invalid or does not exist. Please check and try again",
 			})
 		}
 
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
+		})
+	}
+
+	if loan.Status == "disbursed" {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Loan status already disburse",
 		})
 	}
 

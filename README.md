@@ -46,7 +46,7 @@ POST {base_url}/loans
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "borrower_id": 1,
@@ -57,7 +57,7 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
   "status": "success",
@@ -78,7 +78,7 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "The provided borrower_id is invalid or does not exist. Please check and try again."
+   "message": "The provided borrower_id is invalid or does not exist. Please check and try again"
 }
 ```
 
@@ -104,7 +104,7 @@ PUT {base_url}/loans/9/approve
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "employee_id": 4,
@@ -113,7 +113,7 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
    "status": "success",
@@ -132,7 +132,13 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "message": "The provided employee ID is not authorized to approve this loan.",
+   "message": "The provided employee_id is not authorized to approve this loan",
+   "status": "error"
+}
+```
+```json5
+{
+   "message": "The provided employee_id is invalid or does not exist. Please check and try again",
    "status": "error"
 }
 ```
@@ -154,7 +160,7 @@ PUT {base_url}/loans/7/reject
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "employee_id": 5,
@@ -163,7 +169,7 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
    "status": "success",
@@ -183,7 +189,19 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "invalid employee_id"
+   "message": "The provided employee_id is not authorized to approve this loan"
+}
+```
+```json5
+{
+   "status": "error",
+   "message": "The provided employee_id is invalid or does not exist. Please check and try again"
+}
+```
+```json5
+{
+   "status": "error",
+   "message": "Loan status already rejected",
 }
 ```
 
@@ -201,7 +219,7 @@ PUT {base_url}/loans/2/invest
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "investor_id": 6,
@@ -230,7 +248,18 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "cannot invest more than 450000"
+   "message": "The provided investor_id is invalid or does not exist. Please check and try again",
+}
+```json5
+{
+   "status": "error",
+   "message": "Investment exceeds the maximum allowable amount of 450,000. Please adjust the amount and try again"
+}
+```
+```json5
+{
+   "status": "error",
+   "message": "The loan has already been fully funded and cannot accept further investments.",
 }
 ```
 
@@ -244,7 +273,7 @@ PUT {base_url}/loans/2/disburse
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "employee_id": "string",
@@ -273,7 +302,7 @@ Content-Type: application/json
 ```json5
 {
   "status": "error",
-  "message": "already disburse",
+  "message": "Loan status already disburse",
 }
 ```
 
@@ -324,4 +353,4 @@ Content-Type: application/json
   - **Postman / Curl**: API testing tools   
 
 ## Conclusion
-This API provides essential endpoints for managing loans, including state transitions, investments, payments, and delinquency checks. Follow the provided examples to interact with the API effectively.
+This API provides essential endpoints for managing loans, including state transitions, create new loan, approve or reject, investment (multiple investor) and disbursement. Follow the provided examples to interact with the API effectively.
