@@ -33,7 +33,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 	var query string
 	var user models.User
 
-	query = `select id, name, role from users where id = ? and role = 'staff'`
+	query = `select id, name, role from users where id = ?`
 	if err := utils.DB.QueryRow(query, payload.EmployeeID).Scan(&user.ID, &user.Name, &user.Role); err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -48,9 +48,16 @@ func ApproveLoan(c *fiber.Ctx) error {
 		})
 	}
 
+	if user.Role != "staff" {
+		return c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{
+			"status":  "error",
+			"message": "The provided employee ID is not authorized to approve this loan.",
+		})
+	}
+
 	var loan models.Loan
 
-	query = `select id, total_loan, instalment, duration_weeks, status from loans where id = ? and status = 'proposed'`
+	query = `select id, total_loan, instalment, duration_weeks, status from loans where id = ?`
 	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.TotalLoan, &loan.Instalment, &loan.DurationWeek, &loan.Status); err != nil {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -61,6 +68,27 @@ func ApproveLoan(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
+		})
+	}
+
+	if loan.Status == "approved" {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Loan status already approved",
+		})
+	}
+
+	if loan.Status == "rejected" {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Loan status already rejected",
+		})
+	}
+
+	if loan.Status != "proposed" {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Loan is not in an proposed state",
 		})
 	}
 
