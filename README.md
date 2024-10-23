@@ -78,7 +78,7 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "The provided borrower_id is invalid or does not exist. Please check and try again."
+   "message": "The provided borrower_id is invalid or does not exist. Please check and try again"
 }
 ```
 
@@ -132,7 +132,13 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "message": "The provided employee ID is not authorized to approve this loan.",
+   "message": "The provided employee ID is not authorized to approve this loan",
+   "status": "error"
+}
+```
+```json5
+{
+   "message": "The provided employee_id is invalid or does not exist. Please check and try again",
    "status": "error"
 }
 ```

@@ -38,7 +38,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid employee_id",
+				"message": "The provided employee_id is invalid or does not exist. Please check and try again",
 			})
 		}
 
@@ -51,7 +51,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 	if user.Role != "staff" {
 		return c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{
 			"status":  "error",
-			"message": "The provided employee ID is not authorized to approve this loan.",
+			"message": "The provided employee ID is not authorized to approve this loan",
 		})
 	}
 
