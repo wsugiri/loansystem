@@ -1,5 +1,10 @@
 package utils
 
+import (
+	"fmt"
+	"strings"
+)
+
 func GetNestedValue(data map[string]interface{}, keys ...string) interface{} {
 	var current interface{} = data
 
@@ -17,4 +22,19 @@ func GetNestedValue(data map[string]interface{}, keys ...string) interface{} {
 	}
 
 	return current
+}
+
+// insertCommas formats an integer with thousand separators.
+func InsertCommas(n int) string {
+	s := fmt.Sprintf("%d", n)
+	if len(s) <= 3 {
+		return s
+	}
+
+	var result []string
+	for i := len(s); i > 0; i -= 3 {
+		start := max(0, i-3)
+		result = append([]string{s[start:i]}, result...)
+	}
+	return strings.Join(result, ",")
 }

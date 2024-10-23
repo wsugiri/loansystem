@@ -188,14 +188,14 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "message": "The provided employee ID is not authorized to approve this loan",
-   "status": "error"
+   "status": "error",
+   "message": "The provided employee ID is not authorized to approve this loan"
 }
 ```
 ```json5
 {
-   "message": "The provided employee_id is invalid or does not exist. Please check and try again",
-   "status": "error"
+   "status": "error",
+   "message": "The provided employee_id is invalid or does not exist. Please check and try again"
 }
 ```
 ```json5
@@ -248,7 +248,12 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "cannot invest more than 450000"
+   "message": "The provided investor_id is invalid or does not exist. Please check and try again",
+}
+```json5
+{
+   "status": "error",
+   "message": "Investment exceeds the maximum allowable amount of 450,000. Please adjust the amount and try again"
 }
 ```
 ```json5

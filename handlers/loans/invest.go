@@ -39,7 +39,7 @@ func InvestLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid investor id",
+				"message": "The provided investor_id is invalid or does not exist. Please check and try again",
 			})
 		}
 
@@ -65,7 +65,7 @@ func InvestLoan(c *fiber.Ctx) error {
 			if err.Error() == "sql: no rows in result set" {
 				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 					"status":  "error",
-					"message": "invalid loan id",
+					"message": "The provided loan_id is invalid or does not exist. Please check and try again",
 				})
 			}
 		}
@@ -88,8 +88,7 @@ func InvestLoan(c *fiber.Ctx) error {
 	if availableAmount < payload.Amount {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
-			"message": fmt.Sprintf("cannot invest more than %d", int(availableAmount)),
-			"data":    fiber.Map{"remaining_amount": 0},
+			"message": fmt.Sprintf("Investment exceeds the maximum allowable amount of " + utils.InsertCommas(int(availableAmount)) + ". Please adjust the amount and try again"),
 		})
 	}
 
