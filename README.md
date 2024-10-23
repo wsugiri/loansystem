@@ -46,7 +46,7 @@ POST {base_url}/loans
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "borrower_id": 1,
@@ -57,7 +57,7 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
   "status": "success",
@@ -104,7 +104,7 @@ PUT {base_url}/loans/9/approve
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "employee_id": 4,
@@ -113,7 +113,7 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
    "status": "success",
@@ -160,7 +160,7 @@ PUT {base_url}/loans/7/reject
 Content-Type: application/json
 ```
 
-#### Request Body
+#### Sample Request Body
 ```json5
 {
   "employee_id": 5,
@@ -169,7 +169,7 @@ Content-Type: application/json
 }
 ```
 
-#### Response
+#### Sample Response
 ```json5
 {
    "status": "success",
@@ -188,8 +188,20 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
+   "message": "The provided employee ID is not authorized to approve this loan",
+   "status": "error"
+}
+```
+```json5
+{
+   "message": "The provided employee_id is invalid or does not exist. Please check and try again",
+   "status": "error"
+}
+```
+```json5
+{
    "status": "error",
-   "message": "invalid employee_id"
+   "message": "Loan status already rejected",
 }
 ```
 
@@ -237,6 +249,12 @@ Content-Type: application/json
 {
    "status": "error",
    "message": "cannot invest more than 450000"
+}
+```
+```json5
+{
+   "status": "error",
+   "message": "The loan has already been fully funded and cannot accept further investments.",
 }
 ```
 
