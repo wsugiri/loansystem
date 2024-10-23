@@ -353,4 +353,4 @@ Content-Type: application/json
   - **Postman / Curl**: API testing tools   
 
 ## Conclusion
-This API provides essential endpoints for managing loans, including state transitions, investments, payments, and delinquency checks. Follow the provided examples to interact with the API effectively.
+This API provides essential endpoints for managing loans, including state transitions, create new loan, approve or reject, investment (multiple investor) and disbursement. Follow the provided examples to interact with the API effectively.
