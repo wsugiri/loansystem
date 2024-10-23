@@ -302,7 +302,7 @@ Content-Type: application/json
 ```json5
 {
   "status": "error",
-  "message": "already disburse",
+  "message": "Loan status already disburse",
 }
 ```
 

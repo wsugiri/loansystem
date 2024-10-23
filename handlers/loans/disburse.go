@@ -63,7 +63,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 	  from loans a
 	  left join investments b on b.loan_id = a.id 
 	 where a.id = ?
-	   and a.status in ('approved', 'invested')
+	   and a.status in ('approved', 'invested','disbursed')
 	 group by a.id`
 
 	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.PrincipalAmount, &loan.Status, &loan.Rate, &loan.DurationWeek, &loan.Instalment, &loan.InvestedAmount); err != nil {
@@ -77,6 +77,13 @@ func DisburseLoan(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
+		})
+	}
+
+	if loan.Status == "disbursed" {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Loan status already disburse",
 		})
 	}
 
