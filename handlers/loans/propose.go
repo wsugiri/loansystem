@@ -31,7 +31,7 @@ func ProposeLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid borrower_id",
+				"message": "The provided borrower_id is invalid or does not exist. Please check and try again.",
 			})
 		}
 

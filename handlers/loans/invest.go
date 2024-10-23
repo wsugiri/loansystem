@@ -78,10 +78,18 @@ func InvestLoan(c *fiber.Ctx) error {
 
 	availableAmount := loan.PrincipalAmount - loan.InvestedAmount
 
+	if availableAmount == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  "error",
+			"message": "The loan has already been fully funded and cannot accept further investments.",
+		})
+	}
+
 	if availableAmount < payload.Amount {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"statue":  "error",
+			"status":  "error",
 			"message": fmt.Sprintf("cannot invest more than %d", int(availableAmount)),
+			"data":    fiber.Map{"remaining_amount": 0},
 		})
 	}
 

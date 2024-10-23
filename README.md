@@ -78,7 +78,7 @@ Content-Type: application/json
 ```json5
 {
    "status": "error",
-   "message": "invalid borrower_id"
+   "message": "The provided borrower_id is invalid or does not exist. Please check and try again."
 }
 ```
 
@@ -132,11 +132,16 @@ Content-Type: application/json
 #### Sample Response Error
 ```json5
 {
-   "status": "error",
-   "message": "invalid employee_id"
+   "message": "The provided employee ID is not authorized to approve this loan.",
+   "status": "error"
 }
 ```
-
+```json5
+{
+   "message": "Loan is not in an proposed state",
+   "status": "error"
+}
+```
 
 ### 3. Reject a loan
 The loan rejection process allows staff to deny loan applications that do not meet the necessary criteria or pose potential risks. This step is crucial for maintaining the integrity of the lending system.
