@@ -20,4 +20,5 @@ type LoanOutstanding struct {
 	TotalLoan       float32
 	OutstandingLoan float32
 	DurationWeek    int
+	IsDelinquent    bool
 }
