@@ -92,9 +92,15 @@ func GetDelinquent(c *fiber.Ctx) error {
 		IsDelinquent bool `json:"is_delinquent"`
 	}
 
+	var message = "Borrower is not delinquent"
+
+	if loan.IsDelinquent {
+		message = "Borrower is delinquent"
+	}
+
 	return c.JSON(models.Response{
 		Status:  "success",
-		Message: "Data retrieved successfully",
+		Message: message,
 		Data: Data{
 			LoanID:       loanId,
 			IsDelinquent: loan.IsDelinquent,

@@ -30,6 +30,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 |  6 | `/loans`                         | GET    | List loans                                   |
 |  7 | `/loans/{loan_id}/schedule`      | GET    | Loan Schedule                                |
 |  7 | `/loans/{loan_id}/outstanding`   | GET    | Get Outstanding Balance                      |
+|  7 | `/loans/{loan_id}/delinquent`   | GET    | Check if Borrower is Delinquent              |
 ---
 
 ### 1. Create a new loan
