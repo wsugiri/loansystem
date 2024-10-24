@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/wsugiri/loansystem/handlers/loans/constants"
+	"github.com/wsugiri/loansystem/models"
 )
 
 func GetScheduleLoan(c *fiber.Ctx) error {
@@ -34,10 +35,10 @@ func GetScheduleLoan(c *fiber.Ctx) error {
 
 	schedules, _ := GetPayments(loanId)
 
-	return c.JSON(fiber.Map{
-		"status":  "success",
-		"message": "Loan schedule retrieved successfully.",
-		"data": fiber.Map{
+	return c.JSON(models.Response{
+		Status:  "success",
+		Message: "Loan schedule retrieved successfully.",
+		Data: fiber.Map{
 			"loan_id":  loanId,
 			"schedule": schedules,
 		},

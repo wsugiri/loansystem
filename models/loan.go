@@ -12,3 +12,13 @@ type Loan struct {
 	Status          string
 	AgreementUrl    string
 }
+
+type LoanOutstanding struct {
+	ID              int
+	BorrowerID      int
+	PrincipalAmount float32
+	TotalLoan       float32
+	OutstandingLoan float32
+	DurationWeek    int
+	IsDelinquent    bool
+}
