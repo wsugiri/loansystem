@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/wsugiri/loansystem/handlers/loans/constants"
 	"github.com/wsugiri/loansystem/models"
 	"github.com/wsugiri/loansystem/utils"
 )
@@ -38,7 +39,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "The provided employee_id is invalid or does not exist. Please check and try again",
+				"message": constants.ErrEmployeeInvalid,
 			})
 		}
 
@@ -51,7 +52,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 	if user.Role != "staff" {
 		return c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{
 			"status":  "error",
-			"message": "The provided employee ID is not authorized to approve this loan",
+			"message": constants.ErrEmployeeNoAuthorized,
 		})
 	}
 
@@ -62,7 +63,7 @@ func ApproveLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid loan id",
+				"message": constants.ErrLoanInvalid,
 			})
 		}
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -74,21 +75,21 @@ func ApproveLoan(c *fiber.Ctx) error {
 	if loan.Status == "approved" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan status already approved",
+			"message": constants.ErrLoanApproved,
 		})
 	}
 
 	if loan.Status == "rejected" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan status already rejected",
+			"message": constants.ErrLoanRejected,
 		})
 	}
 
 	if loan.Status != "proposed" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan is not in an proposed state",
+			"message": constants.ErrLoanNotInProposed,
 		})
 	}
 
@@ -160,7 +161,7 @@ func RejectLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "The provided employee_id is invalid or does not exist. Please check and try again",
+				"message": constants.ErrEmployeeInvalid,
 			})
 		}
 
@@ -173,7 +174,7 @@ func RejectLoan(c *fiber.Ctx) error {
 	if user.Role != "staff" {
 		return c.Status(fiber.StatusNotAcceptable).JSON(fiber.Map{
 			"status":  "error",
-			"message": "The provided employee ID is not authorized to approve this loan",
+			"message": constants.ErrEmployeeNoAuthorized,
 		})
 	}
 
@@ -184,7 +185,7 @@ func RejectLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "invalid loan id",
+				"message": constants.ErrLoanInvalid,
 			})
 		}
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
