@@ -56,16 +56,18 @@ func ApproveLoan(c *fiber.Ctx) error {
 		})
 	}
 
-	var loan models.Loan
+	loan, err := CheckLoan(loanId)
 
-	query = `select id, total_loan, instalment, duration_weeks, status from loans where id = ?`
-	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.TotalLoan, &loan.Instalment, &loan.DurationWeek, &loan.Status); err != nil {
+	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"status":  "error",
-				"message": constants.ErrLoanInvalid,
-			})
+			if err.Error() == "sql: no rows in result set" {
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+					"status":  "error",
+					"message": constants.ErrLoanInvalid,
+				})
+			}
 		}
+
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
@@ -178,16 +180,18 @@ func RejectLoan(c *fiber.Ctx) error {
 		})
 	}
 
-	var loan models.Loan
+	loan, err := CheckLoan(loanId)
 
-	query = `select id, borrower_id, total_loan, instalment, duration_weeks, status from loans where id = ?`
-	if err := utils.DB.QueryRow(query, loanId).Scan(&loan.ID, &loan.BorrowerID, &loan.TotalLoan, &loan.Instalment, &loan.DurationWeek, &loan.Status); err != nil {
+	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-				"status":  "error",
-				"message": constants.ErrLoanInvalid,
-			})
+			if err.Error() == "sql: no rows in result set" {
+				return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+					"status":  "error",
+					"message": constants.ErrLoanInvalid,
+				})
+			}
 		}
+
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
 			"message": err.Error(),
