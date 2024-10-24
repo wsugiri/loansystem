@@ -197,21 +197,21 @@ func RejectLoan(c *fiber.Ctx) error {
 	if loan.Status == "approved" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan status already approved",
+			"message": constants.ErrLoanApproved,
 		})
 	}
 
 	if loan.Status == "rejected" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan status already rejected",
+			"message": constants.ErrLoanRejected,
 		})
 	}
 
 	if loan.Status != "proposed" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan is not in an proposed state",
+			"message": constants.ErrLoanNotInProposed,
 		})
 	}
 
@@ -221,7 +221,7 @@ func RejectLoan(c *fiber.Ctx) error {
 		fmt.Println("Error parsing date:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  "error",
-			"message": "invalid rejection date",
+			"message": constants.ErrInvalidRejectionDate,
 		})
 	}
 

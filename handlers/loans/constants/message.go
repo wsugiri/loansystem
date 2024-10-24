@@ -10,4 +10,7 @@ const (
 	ErrLoanNotInProposed = "Loan is not in an proposed state"
 	ErrLoanApproved      = "Loan status already approved"
 	ErrLoanRejected      = "Loan status already rejected"
+	ErrLoanDisbursed     = "Loan status already disbursed"
+
+	ErrInvalidRejectionDate = "invalid rejection date"
 )
