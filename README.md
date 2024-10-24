@@ -28,6 +28,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 |  4 | `/loans/{id}/invest`             | PUT    | Invest in a loan                             |
 |  5 | `/loans/{id}/disburse`           | PUT    | Disburse the loan                            |
 |  6 | `/loans`                         | GET    | List loans                                   |
+|  7 | `/loans/{loan_id}/schedule`      | GET    | Loan Schedule                                |
 ---
 
 ### 1. Create a new loan
