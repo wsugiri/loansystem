@@ -14,6 +14,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Put("/api/loans/:id/disburse", loans.DisburseLoan)
 	app.Get("/api/loans", loans.ListLoan)
 	app.Get("/api/loans/:id/schedule", loans.GetScheduleLoan)
+	app.Get("/api/loans/:id/outstanding", loans.GetOutstanding)
 
 	app.Get("/api/master/users", master.ListAllUser)
 	app.Get("/api/master/users/:role", master.ListAllUser)

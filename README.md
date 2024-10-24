@@ -29,6 +29,7 @@ This repository contains a **Loan Management API** built with **Go**, designed t
 |  5 | `/loans/{id}/disburse`           | PUT    | Disburse the loan                            |
 |  6 | `/loans`                         | GET    | List loans                                   |
 |  7 | `/loans/{loan_id}/schedule`      | GET    | Loan Schedule                                |
+|  7 | `/loans/{loan_id}/outstanding`   | GET    | Get Outstanding Balance                      |
 ---
 
 ### 1. Create a new loan

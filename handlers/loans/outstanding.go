@@ -2,13 +2,14 @@ package loans
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/wsugiri/loansystem/handlers/loans/constants"
 	"github.com/wsugiri/loansystem/models"
 )
 
-func GetScheduleLoan(c *fiber.Ctx) error {
+func GetOutstanding(c *fiber.Ctx) error {
 	loanId, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -33,14 +34,21 @@ func GetScheduleLoan(c *fiber.Ctx) error {
 		})
 	}
 
-	schedules, _ := GetPayments(loanId)
+	var transDate = c.Query("trans_date")
+	if transDate == "" {
+		transDate = time.Now().Format("2006-01-02")
+	}
+
+	println(transDate)
+
+	loan, _ := CheckLoanOutstanding(loanId, transDate)
 
 	return c.JSON(models.Response{
 		Status:  "success",
-		Message: "Loan schedule retrieved successfully.",
+		Message: "Outstanding balance retrieved successfully",
 		Data: fiber.Map{
-			"loan_id":  loanId,
-			"schedule": schedules,
+			"loan_id":            loanId,
+			"outstanding_amount": loan.OutstandingLoan,
 		},
 	})
 }
