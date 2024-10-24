@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/wsugiri/loansystem/handlers/loans/constants"
 	"github.com/wsugiri/loansystem/models"
 	"github.com/wsugiri/loansystem/utils"
 )
@@ -45,7 +46,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "The provided employee_id is invalid or does not exist. Please check and try again",
+				"message": constants.ErrEmployeeInvalid,
 			})
 		}
 
@@ -70,7 +71,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 		if err.Error() == "sql: no rows in result set" {
 			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 				"status":  "error",
-				"message": "The provided loan_id is invalid or does not exist. Please check and try again",
+				"message": constants.ErrLoanInvalid,
 			})
 		}
 
@@ -83,7 +84,7 @@ func DisburseLoan(c *fiber.Ctx) error {
 	if loan.Status == "disbursed" {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"status":  "error",
-			"message": "Loan status already disburse",
+			"message": constants.ErrLoanDisbursed,
 		})
 	}
 

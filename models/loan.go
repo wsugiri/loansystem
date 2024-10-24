@@ -10,4 +10,5 @@ type Loan struct {
 	Instalment      float32
 	DurationWeek    int
 	Status          string
+	AgreementUrl    string
 }
