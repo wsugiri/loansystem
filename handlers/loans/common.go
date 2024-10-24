@@ -1,6 +1,9 @@
 package loans
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/wsugiri/loansystem/models"
 	"github.com/wsugiri/loansystem/utils"
 )
@@ -29,4 +32,23 @@ select a.id, a.borrower_id, a.principal_amount, a.rate, a.total_loan, a.instalme
 	)
 
 	return loan, err
+}
+
+func GetPayments(loanId int) ([]models.Instalment, error) {
+	var query = `select week, amount, due_date, is_paid, ifnull(payment_date, '') payment_date from payments where loan_id = ?`
+
+	rows, err := utils.DB.Query(query, loanId)
+
+	fmt.Println(loanId)
+
+	var schedules []models.Instalment
+	for rows.Next() {
+		var sched models.Instalment
+		if err := rows.Scan(&sched.Week, &sched.Amount, &sched.DueDate, &sched.IsPaid, &sched.PaymentDate); err != nil {
+			log.Fatal(err)
+		}
+		schedules = append(schedules, sched)
+	}
+
+	return schedules, err
 }

@@ -10,7 +10,9 @@ type Payment struct {
 }
 
 type Instalment struct {
-	Week    int
-	Amount  float32
-	DueDate string
+	Week        int     `json:"week"`
+	Amount      float32 `json:"amount"`
+	DueDate     string  `json:"due_date"`
+	PaymentDate string  `json:"payment_date"`
+	IsPaid      bool    `json:"paid"`
 }

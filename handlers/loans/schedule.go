@@ -16,7 +16,7 @@ func GetScheduleLoan(c *fiber.Ctx) error {
 		})
 	}
 
-	loan, err := CheckLoan(loanId)
+	_, err = CheckLoan(loanId)
 
 	if err != nil {
 		if err.Error() == "sql: no rows in result set" {
@@ -32,9 +32,14 @@ func GetScheduleLoan(c *fiber.Ctx) error {
 		})
 	}
 
+	schedules, _ := GetPayments(loanId)
+
 	return c.JSON(fiber.Map{
 		"status":  "success",
 		"message": "Loan schedule retrieved successfully.",
-		"data":    loan,
+		"data": fiber.Map{
+			"loan_id":  loanId,
+			"schedule": schedules,
+		},
 	})
 }
